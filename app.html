@@ -87,10 +87,54 @@
       </nav>
     </header>
 
-    <main class="container mt-3">
-      <h1>App UI Goes Here</h1>
-      <input type="text" placeholder="Enter a Message" id="message"/>
-      <button class="btn btn-primary" id="btnSubmit">Display Message</button>
+    <main class="container mt-5">
+      <div class="row gy-3">
+        <div class="col-lg-4">
+          <label for="loanAmount" class="form-label">Loan Amount</label>
+          <input class="form-control mb-3" min="1" type="number" name="loanAmount" placeholder="$25,000" id="loanAmount">
+
+          <label for="loanTerm" class="form-label">Loan Term (Months)</label>
+          <input class="form-control mb-3" min="1" type="number" name="loanTerm" placeholder="60" id="loanTerm">
+
+          <label for="interestRate" class="form-label">Interest Rate</label>
+          <input class="form-control mb-3" min="1" type="number" name="interestRate" placeholder="5%" id="interestRate">
+          <div class="text-end mt-5">
+            <button class="btn btn-dark" onclick="getInput()">Calculate</button>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="text-center">
+            <h1>Your Monthly Payment</h1>
+            <h2 class="lead display-6" id="monthlyPayment">$0.00</h2>
+          </div>
+          <span>Total Principal</span>
+          <span id="totalPrincipal">$0.00</span>
+          <br>
+            <span>Total Interest</span>
+            <span id="totalInterest">$0.00</span>
+          <br>
+          <span>Total Cost</span>
+          <span id="totalCost">$0.00</span>
+        </div>
+      </div>
+      <div class="table-responsive mt-5">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Payment</th>
+              <th>Principal</th>
+              <th>Interest</th>
+              <th>Total Interest</th>
+              <th>Balance</th>
+            </tr>
+          </thead>
+          <tbody id="monthlyData">
+            <!-- Montly Data -->
+
+          </tbody>
+        </table>
+      </div>
     </main>
 
 <footer>
@@ -109,9 +153,18 @@
         </div>
     </div>
 </div>
-
-
 </footer>
+
+<template id="tableRowTemplate">
+            <tr>
+              <td data-id="month"></td>
+              <td data-id="payment"></td>
+              <td data-id="principal"></td>
+              <td data-id="interest"></td>
+              <td data-id="totalInterest"></td>
+              <td data-id="balance"></td>
+            </tr>
+</template>
 
     <!-- Bootstrap JS -->
     <script
@@ -125,8 +178,5 @@
 
 <!--  App JS -->
 <script src="/js/site.js"></script>
-<script>
-    document.getElementById('btnSubmit').addEventListener('click', displayMessage);
-</script>
-  </body>
+</body>
 </html>
