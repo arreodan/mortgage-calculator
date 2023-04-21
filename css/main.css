@@ -1,0 +1,100 @@
+:root {
+    /* fonts */
+  --da-title-font: "Bebas Neue", sans-serif;
+  --da-subtitle-font: "Fira Sans", sans-serif;
+  --da-heading-font: "Bebas Neue", sans-serif;
+  --da-body-font: "Roboto", sans-serif;
+  /* colors */
+  --da-primary-color: #2A628F;
+  --da-secondary-color: #3E92CC;
+  --da-highlight-color: #fb8500;
+  --da-dark-color: #16324F;
+  --da-light-color: #256c9e;
+  --da-plain-color: #FDFFFC;
+  --da-background-color: var(--da-plain-color);
+
+  /* nav bar colors */
+  --da-nav-bg-color: var(--da-dark-color);
+  --da-nav-toggler-color: var(--da-highlight-color);
+  --da-nav-toggler-glow: rgba(250, 225, 120, 0.55);
+
+  /* form colors */
+  --da-formfocus-border-color: var(--da-secondary-color);
+  --da-formfocus-shadow: var(--da-primary-color);
+  --da-form-background-color: var(--da-dark-color);
+
+  /* text styles */
+  --da-title-color: var(--da-dark-color);
+  --da-font-size: 1.2rem;
+  --da-font-weight: 400;
+  --da-line-height: 1.5rem;
+}
+
+/* Sticky Footer */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--da-body-font);
+  font-size: var(--da-font-size);
+  font-weight: var(--da-font-weight);
+  line-height: var(--da-line-height);
+
+  color: var(--da-dark-color);
+  background: var(--da-background-color);
+}
+
+main {
+  flex-grow: 1;
+}
+
+footer {
+  flex-shrink: 0;
+}
+
+/* Sticky Footer End */
+.socialicons {
+  font-size: 2rem;
+  color: var(--da-secondary-color);
+  transition: color 0.25s;
+    padding-left: .65rem;
+}
+
+.socialicons:hover {
+  color: var(--da-highlight-color);
+}
+
+#mainNav{
+    background: var(--da-dark-color);
+}
+
+footer{
+    background: var(--da-dark-color);
+    color: var(--da-plain-color);
+}
+
+.bi-file-earmark-person{
+  padding-left: .45rem;
+}
+
+
+.checklist{
+    list-style-type: none;
+}
+
+.checklist>li i{
+    color: var(--da-highlight-color);
+}
+
+.devIcons{
+    font-size: 3.5rem;
+    padding-left: 1rem;
+}
+
+.appLogo{
+    max-width: 400px;
+}
