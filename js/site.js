@@ -43,10 +43,6 @@ function calculateData(loanAmount, loanTerm, interestRate, previousInterest, pre
 }
 
 
-
-
-
-
 function displayData(loanAmount, loanTerm, interestRate, previousBalance){
     const dataTable = document.getElementById('monthlyData');
     const template = document.getElementById('tableRowTemplate');
@@ -59,11 +55,11 @@ function displayData(loanAmount, loanTerm, interestRate, previousBalance){
         let tableRow = document.importNode(template.content, true)
 
         tableRow.querySelector('[data-id="month"]').textContent = i + 1;
-        tableRow.querySelector('[data-id="payment"]').textContent = monthlyData.payment;
-        tableRow.querySelector('[data-id="principal"]').textContent = monthlyData.principal;
-        tableRow.querySelector('[data-id="interest"]').textContent = monthlyData.interest;
-        tableRow.querySelector('[data-id="totalInterest"]').textContent = monthlyData.totalInterest;
-        tableRow.querySelector('[data-id="balance"]').textContent = monthlyData.balance;
+        tableRow.querySelector('[data-id="payment"]').textContent = "$" + monthlyData.payment;
+        tableRow.querySelector('[data-id="principal"]').textContent = "$" +  monthlyData.principal;
+        tableRow.querySelector('[data-id="interest"]').textContent = "$" +  monthlyData.interest;
+        tableRow.querySelector('[data-id="totalInterest"]').textContent = "$" +  monthlyData.totalInterest;
+        tableRow.querySelector('[data-id="balance"]').textContent = "$" +  monthlyData.balance;
 
 
         dataTable.appendChild(tableRow);

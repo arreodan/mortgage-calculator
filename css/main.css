@@ -10,7 +10,7 @@
   --da-highlight-color: #fb8500;
   --da-dark-color: #16324F;
   --da-light-color: #256c9e;
-  --da-plain-color: #FDFFFC;
+  --da-plain-color: #eeeeee;
   --da-background-color: var(--da-plain-color);
 
   /* nav bar colors */
@@ -97,4 +97,10 @@ footer{
 
 .appLogo{
     max-width: 400px;
+}
+
+.bordered{
+  background-color: rgb(253, 252, 252);
+  padding: 1rem;
+  border-radius: 2rem;
 }
