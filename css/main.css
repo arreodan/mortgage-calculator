@@ -100,7 +100,11 @@ footer{
 }
 
 .bordered{
-  background-color: rgb(253, 252, 252);
-  padding: 1rem;
-  border-radius: 2rem;
+  background-color: rgb(251, 252, 255);
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.display-6{
+font-size: 2.25rem;
 }
