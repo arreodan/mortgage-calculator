@@ -1,12 +1,19 @@
-// get the values for the loan out of the form
+// clear the table before displaying new results
+function clearTable() {
+  const dataTable = document.getElementById("monthlyData");
+  while (dataTable.firstChild) {
+    dataTable.removeChild(dataTable.firstChild);
+  }
+}
 
+// get the values for the loan out of the form
 // validate inputs
 function getValues() {
   let loanAmount = parseFloat(document.getElementById("loanAmount").value);
   let loanTerm = parseInt(document.getElementById("loanTerm").value);
   let interestRate = parseFloat(document.getElementById("interestRate").value);
 
-  document.getElementById('monthlyPayment').innerText = "$0.00";
+  document.getElementById("monthlyPayment").innerText = "$0.00";
 
   if (
     !isNaN(loanAmount) &&
@@ -16,6 +23,7 @@ function getValues() {
     loanTerm > 0 &&
     interestRate > 0
   ) {
+    clearTable(); // clear the table before displaying new results
     let totals = calculateTotals(loanAmount, loanTerm, interestRate);
     let payments = calculatePayments(loanAmount, loanTerm, interestRate);
 
