@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loan Pro</title>
+    <title>MoneyUp - The Code</title>
   <!-- Google Font-->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -25,6 +25,8 @@
 <link rel="stylesheet" href="/css/main.css">
 <!-- Prism CSS -->
 <link rel="stylesheet" href="/css/prism.css">
+<!-- Favicon -->
+<link rel="shortcut icon" href="/img/LogoNoMargin.png" type="image/x-icon" />
 </head>
 <body>
 <header>
@@ -50,14 +52,14 @@
                        <a class="nav-link active" href="/code.html">Code</a>
                    </li>
                    <li class="nav-item">
-                       <a class="nav-link" href="#" target="_blank">Repo</a>
+                       <a class="nav-link" href="https://github.com/arreodan/mortgage-calculator" target="_blank">Repo</a>
                    </li>
                    <li class="nav-item">
-                       <a class="nav-link" href="https://danielarreola.netlify.app" target="_blank">Portfolio</a>
+                       <a class="nav-link" href="https://danielarreola.dev" target="_blank">Portfolio</a>
                    </li>
                    <li class="nav-item">
                     <!-- Link blog when I have one -->
-                       <a class="nav-link" href="#">Blog</a> 
+                       <a target="_blank" class="nav-link" href="https://blogdanielarreola-production.up.railway.app/Content/building-a-mortgage-calculator-with-javascript-a-step-by-step-guide">Blog</a> 
                    </li>
                 </ul>
            </div>
@@ -71,25 +73,193 @@
         <div class="col-12 col-lg-8">
             <pre class="line-numbers">
                 <code class="language-js">
-function displayMessage() {
-    let msg = document.getElementById('message').value;
-    // alert(msg);
-
-    Swal.fire(
-        {
-            backdrop: false,
-            title: 'App Name',
-            text: msg
-        }
-    );
+// clear the table before displaying new results
+function clearTable() {
+  const dataTable = document.getElementById("monthlyData");
+  while (dataTable.firstChild) {
+    dataTable.removeChild(dataTable.firstChild);
+  }
 }
+
+// get the values for the loan out of the form
+// validate inputs
+function getValues() {
+  let loanAmount = parseFloat(document.getElementById("loanAmount").value);
+  let loanTerm = parseInt(document.getElementById("loanTerm").value);
+  let interestRate = parseFloat(document.getElementById("interestRate").value);
+
+  document.getElementById("monthlyPayment").innerText = "$0.00";
+
+  if (
+    !isNaN(loanAmount) &&
+    !isNaN(loanTerm) &&
+    !isNaN(interestRate) &&
+    loanAmount > 0 &&
+    loanTerm > 0 &&
+    interestRate > 0
+  ) {
+    clearTable(); // clear the table before displaying new results
+    let totals = calculateTotals(loanAmount, loanTerm, interestRate);
+    let payments = calculatePayments(loanAmount, loanTerm, interestRate);
+
+    calculatePayments(loanAmount, loanTerm, interestRate);
+    displayTotals(totals);
+    displayPayments(payments);
+  } else {
+    Swal.fire({
+      icon: "error",
+      backdrop: false,
+      title: "Uh oh!",
+      text: "Please enter valid numbers for your loan details.",
+    });
+  }
+}
+
+// calculate the loan payments
+
+// calculate the totals
+function calculateTotals(loanAmount, loanTerm, interestRate) {
+  // get the monthly payment
+  let monthlyPayment = calculateMonthlyPayment(
+    loanAmount,
+    loanTerm,
+    interestRate
+  );
+  // total cost is monthly payment * loanTerm
+  let totalCost = monthlyPayment * loanTerm;
+  // total interest is cost - principal
+  let totalInterest = totalCost - loanAmount;
+
+  let totals = {
+    monthlyPayment: monthlyPayment,
+    loanAmount: loanAmount,
+    interest: totalInterest,
+    cost: totalCost,
+  };
+
+  return totals;
+}
+// calculate the amortization schedule
+function calculatePayments(loanAmount, loanTerm, interestRate) {
+  // get the monthly payment
+  let monthlyPayment = calculateMonthlyPayment(
+    loanAmount,
+    loanTerm,
+    interestRate
+  );
+  // calculate the remaining values
+  let balance = loanAmount;
+  let totalInterest = 0;
+
+  let payments = [];
+
+  for (let month = 1; month &lt;= loanTerm; month++) {
+    let interest = balance * (interestRate / 1200);
+    let principalPayment = monthlyPayment - interest;
+    totalInterest += interest;
+    balance -= principalPayment;
+
+    let loanPayment = {
+      month: month,
+      payment: monthlyPayment,
+      principal: principalPayment,
+      interest: interest,
+      totalInterest: totalInterest,
+      balance: Math.abs(balance),
+    };
+
+    payments.push(loanPayment);
+  }
+
+  return payments;
+}
+
+function calculateMonthlyPayment(loanAmount, loanTerm, interestRate) {
+  let monthlyPayment =
+    (loanAmount * (interestRate / 1200)) /
+    (1 - (1 + interestRate / 1200) ** -loanTerm);
+
+  return monthlyPayment;
+}
+
+// disply calculations on the page
+
+// display totals
+function displayTotals(loanTotals) {
+  let formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
+  document.getElementById("monthlyPayment").innerText = formatter.format(
+    loanTotals.monthlyPayment
+  );
+  document.getElementById("totalPrincipal").innerText = formatter.format(
+    loanTotals.loanAmount
+  );
+  document.getElementById("totalInterest").innerText = formatter.format(
+    loanTotals.interest
+  );
+  document.getElementById("totalCost").innerText = formatter.format(
+    loanTotals.cost
+  );
+}
+
+// display table rows
+function displayPayments(loanPayments) {
+  const dataTable = document.getElementById("monthlyData");
+  const template = document.getElementById("tableRowTemplate");
+
+  let formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
+  for (let i = 0; i &lt; loanPayments.length; i++) {
+    let payment = loanPayments[i];
+
+    let tableRow = document.importNode(template.content, true);
+    let tds = tableRow.querySelectorAll("td");
+
+    tds[0].textContent = payment.month;
+    tds[1].textContent = formatter.format(payment.payment);
+    tds[2].textContent = formatter.format(payment.principal);
+    tds[3].textContent = formatter.format(payment.interest);
+    tds[4].textContent = formatter.format(payment.totalInterest);
+    tds[5].textContent = formatter.format(payment.balance);
+
+    dataTable.appendChild(tableRow);
+  }
+}
+
                 </code>
             </pre>
         </div>
         <div class="col-12 col-lg-4">
-            <p>the code is structed in one function</p>
-            <h5>displayMessage</h5>
-            <p>Prints out the message</p>
+            <p>
+<h5>clearTable</h5>
+This function clears the contents of a table with the id "monthlyData" by removing all its child elements.
+<br><br>
+<h5>getValues</h5>
+This function retrieves the values entered in a loan form, validates the inputs, and proceeds with calculations and display if the inputs are valid. Otherwise, it shows an error message using the Swal.fire library.
+<br><br>
+<h5>calculateTotals</h5>
+This function calculates the total cost, total interest, and monthly payment for a loan based on the provided loan amount, loan term (in months), and interest rate. It returns an object containing these calculated values.
+<br><br>
+<h5>calculatePayments</h5>
+This function calculates the amortization schedule for a loan based on the loan amount, loan term, and interest rate. It iterates over the loan term and calculates the principal, interest, total interest, and remaining balance for each month. It returns an array of objects representing each payment month's details.
+<br><br>
+<h5>calculateMonthlyPayment</h5>
+This function computes the monthly payment amount for a loan based on the loan amount, loan term (in months), and interest rate. It uses the formula for calculating the monthly payment.
+<br><br>
+<h5>displayTotals</h5>
+This function takes the loan totals object and displays the monthly payment, total principal, total interest, and total cost on the page. It formats the values as currency using the Intl.NumberFormat object.
+<br><br>
+<h5>displayPayments</h5>
+This function takes the array of loan payments and displays them in a table on the page. It iterates over each payment object, formats the values as currency, and appends a table row to the "monthlyData" table for each payment.
+<br><br>
+These functions work together to clear the table, retrieve and validate loan details, perform calculations, and display the results on the page for a loan amortization calculator.
+</p>
         </div>
     </div>
 </main>
@@ -104,8 +274,8 @@ function displayMessage() {
             <img src="/img/LogoWTextnomargin.png" alt="" height="65">
         </div>
         <div class="col text-center text-lg-end">
-            <a href="" target="_blank"><i class="bi bi-linkedin socialicons"></i></a>
-            <a href="" target="_blank"><i class="bi bi-github socialicons"></i></a>
+            <a href="https://www.linkedin.com/in/arreoda/" target="_blank"><i class="bi bi-linkedin socialicons"></i></a>
+            <a href="https://github.com/arreodan" target="_blank"><i class="bi bi-github socialicons"></i></a>
             <a href="" target="_blank"><i class="bi bi-file-earmark-person socialicons"></i></a>
         </div>
     </div>
